@@ -39,7 +39,7 @@
       <div class="popup">
         <a class="close" href="##">&times;</a>
         <h1>Accedi</h1>
-        <form action="./php/login.php" method="POST">
+        <form action="./api/login.php" method="POST">
           <input name="email" id="email" type="text" placeholder="Email" required>
           <input name="password" id="password" type="password" placeholder="Password" required>
           <p>Non hai un account? <a href="index.php#register-popup">Registrati ora</a></p>
@@ -54,7 +54,7 @@
       <div class="popup">
         <a class="close" href="##">&times;</a>
         <h1>Registrati</h1>
-        <form action="./php/register.php" method="POST">
+        <form action="./api/register.php" method="POST">
           <input id="username"  name="username" type="text" placeholder="Nome utente" required>
           <input id="email" name="email" type="text" placeholder="Email" required>
           <input id="password" name="password" type="password" placeholder="Password" required>

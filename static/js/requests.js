@@ -4,10 +4,11 @@ var newChampionshipUsersName = Array();
 var session_credentials;
 
 loadUser();
+loadChampionshipPageData();
 
 function loadUser() {
     $.ajax({
-        url: "./php/get_session.php",
+        url: "./api/get_session.php",
         cache: false
     }).done(function(result){
         session_credentials = $.parseJSON(result);
@@ -15,7 +16,7 @@ function loadUser() {
         const formData = new FormData();
         formData.append('email', session_credentials.email);
     
-        fetch('./php/get_user_by_email.php', {
+        fetch('./api/get_user_by_email.php', {
             method: 'POST',
             header: {
                 'Content-Type': 'application/json'
@@ -38,7 +39,7 @@ function loadUser() {
             }
         });
     
-        fetch('./php/get_most_recent_championship_by_email.php', {
+        fetch('./api/get_most_recent_championship_by_email.php', {
             method: 'POST',
             header: {
                 'Content-Type': 'application/json'
@@ -46,8 +47,8 @@ function loadUser() {
             body: formData,
         }).then(response => response.json()).then(data => {
             if (data[0]){
-                formData.append('most_recent_championship_id', data[0].id_championship);
-                fetch('./php/get_championship_by_id.php', {
+                formData.append('id_championship', data[0].id_championship);
+                fetch('./api/get_championship_by_id.php', {
                     method: 'POST',
                     header: {
                         'Content-Type': 'application/json'
@@ -57,7 +58,7 @@ function loadUser() {
                     if (data){
                         var tableRows = "<tr><th id=\"column-1\">Posizione</th><th id=\"column-2\">Pilota</th><th id=\"column-3\">Punti</th></tr>";
                         for (var i = 0; i < data.length; i++){
-                            tableRows += "<tr><td>1°</td><td>"+data[i].username+"</td><td>122</td></tr>"
+                            tableRows += "<tr><td>"+(i+1)+"°</td><td>"+data[i].username+"</td><td>"+data[i].points+"</td></tr>"
                         }
                         
                         if (document.getElementById('championship-users')) document.getElementById('championship-users').innerHTML = tableRows;
@@ -70,7 +71,7 @@ function loadUser() {
 
 function deleteUser() {
     var formData = new FormData().append("email", user.email);
-    fetch('./php/delete_user_by_email.php', {
+    fetch('./api/delete_user_by_email.php', {
         method: 'POST',
         header: {
         'Content-Type': 'application/json'
@@ -78,7 +79,7 @@ function deleteUser() {
         body: formData,
     });
 
-    window.location.href = './php/logout.php';
+    window.location.href = './api/logout.php';
 }
 
 function changeUsername() {
@@ -86,7 +87,7 @@ function changeUsername() {
     formData.append("email", user.email);
     formData.append('username', document.getElementById('new-username').value);
 
-    fetch('./php/update_username_by_email.php', {
+    fetch('./api/update_username_by_email.php', {
         method: 'POST',
         header: {
         'Content-Type': 'application/json'
@@ -108,7 +109,7 @@ function createNewChampionship(){
         formData.append("email", user.email);
         formData.append('new_championship_name', document.getElementById('new-championship-input').value);
 
-        fetch('./php/create_new_championship.php', {
+        fetch('./api/create_new_championship.php', {
             method: 'POST',
             header: {
             'Content-Type': 'application/json'
@@ -119,7 +120,7 @@ function createNewChampionship(){
             championshipFormData.append('id_championship', data[0].id);
             for (var i = 0; i < newChampionshipUsersEmail.length; i++){
                 championshipFormData.append('email', newChampionshipUsersEmail[i]);
-                fetch('./php/email_validation.php', {
+                fetch('./api/email_validation.php', {
                     method: 'POST',
                     header: {
                     'Content-Type': 'application/json'
@@ -129,7 +130,7 @@ function createNewChampionship(){
                     if (data[0].exists){
                         championshipFormData.append('id_user', data[0].id);
 
-                        fetch('./php/add_user_to_championship.php', {
+                        fetch('./api/add_user_to_championship.php', {
                             method: 'POST',
                             header: {
                             'Content-Type': 'application/json'
@@ -155,7 +156,7 @@ function addNewChampionshipUsers(){
     userToAddFormData.append('email', document.getElementById('new-user-input').value);
     newChampionshipUsersEmail.push(document.getElementById('new-user-input').value);
 
-    fetch('./php/email_validation.php', {
+    fetch('./api/email_validation.php', {
         method: 'POST',
         header: {
         'Content-Type': 'application/json'
@@ -174,7 +175,7 @@ function buildChampionshipCards(){
     if (user){
         var formData = new FormData();
         formData.append("email", user.email);
-        fetch('./php/get_users_championships_by_email.php', {
+        fetch('./api/get_users_championships_by_email.php', {
             method: 'POST',
             header: {
             'Content-Type': 'application/json'
@@ -202,5 +203,38 @@ function buildChampionshipUsersTable(){
 
     if (document.getElementById('championship-users-table')){ 
         document.getElementById('championship-users-table').innerHTML = table;
+    }
+}
+
+function loadChampionshipPageData() {
+    if (document.getElementById('championship-classification')){
+        let paramString = document.URL.split('?')[1];
+        let queryString = new URLSearchParams(paramString);
+
+        // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+        let championshipId = queryString.entries().next().value[1];
+        if (championshipId){
+            var formData = new FormData();
+            formData.append('id_championship', parseInt(championshipId));
+
+            fetch('./api/get_championship_by_id.php', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: formData,
+            }).then(response => response.json()).then(data => {
+                if (data){
+                    document.getElementById('championship-name').innerHTML = "\""+data[0].name+"\"";
+
+                    var tableRows = "<tr><th id=\"column-1\">Posizione</th><th id=\"column-2\">Pilota</th><th id=\"column-3\">Punti</th></tr>";
+                    for (var i = 0; i < data.length; i++){
+                        tableRows += "<tr><td>"+(i+1)+"°</td><td>"+data[i].username+"</td><td>"+data[i].points+"</td></tr>"
+                    }
+                    
+                    document.getElementById('championship-classification').innerHTML = tableRows;
+                }
+            });
+        }
     }
 }

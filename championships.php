@@ -34,7 +34,7 @@
     <div class="menu">
       <a id="menu-close"><img src="./static/resources/close.svg"></a>
       <a href="#"><h4 class="hover-underline-animation">Contattaci</h4></a>
-      <a href="./php/logout.php"><h4 class="hover-underline-animation">Logout</h4></a>
+      <a href="./api/logout.php"><h4 class="hover-underline-animation">Logout</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Privacy</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Termini e condizioni</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Cookies</h4></a>

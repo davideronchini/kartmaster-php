@@ -4,12 +4,12 @@ require_once("./config.php");
 
 $sql = "SELECT users.id AS user_id, users.email, users.username, championships.id AS championship_id, championships.name, championships.date FROM users
 INNER JOIN users_championships ON users.id = users_championships.id_user
-INNER JOIN championships ON championships.id = ? AND championships.id = users_championships.id_championship; ";
+INNER JOIN championships ON championships.id = ? AND championships.id = users_championships.id_championship;";
 
 if($statement = $connection->prepare($sql)){
     $statement->bind_param("i", $id);
 
-    $id = $_POST['most_recent_championship_id'];
+    $id = $_POST['id_championship'];
 
     $statement->execute();
 
@@ -24,9 +24,16 @@ if($statement = $connection->prepare($sql)){
             $tmp['championship_id'] = $row['championship_id'];
             $tmp['name'] = $row['name'];
             $tmp['date'] = $row['date'];
+            //TODO: fai un for dove scorri l'array di records della tabella result dove sommi i punti dei record con attributo email = $row['email']
+            $tmp['points'] = 0;
             
             array_push($data, $tmp);
         }
+
+        // Sort the array by points
+        usort($data, fn($a, $b) => $a['points'] <=> $b['points']);
+        // Reverse the array
+        $data = array_reverse($data);
 
         echo json_encode($data);
     }else {

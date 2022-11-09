@@ -34,12 +34,12 @@
     <div class="menu">
       <a id="menu-close"><img src="./static/resources/close.svg"></a>
       <a href="#"><h4 class="hover-underline-animation">Contattaci</h4></a>
-      <a href="#"><h4 class="hover-underline-animation">Logout</h4></a>
+      <a href="./api/logout.php"><h4 class="hover-underline-animation">Logout</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Privacy</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Termini e condizioni</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Cookies</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Disclaimer</h4></a>
-      <a href="#"><h4 class="hover-underline-animation"><span>Elimina account</span></h4></a>
+      <a onclick="deleteUser()"><h4 class="hover-underline-animation"><span>Elimina account</span></h4></a>
     </div>
 
     <!-- Content -->
@@ -52,20 +52,11 @@
         </div>
         <div class="championship-top">
           <h2>Classifica campionato</h2>
-          <h3>“Italian formula”</h3>
+          <h3 id="championship-name">“”</h3>
         </div>
         <div class="table">
-          <table>
-            <tr>
-              <th id="column-1">Posizione</th>
-              <th id="column-2">Pilota</th>
-              <th id="column-3">Punti</th>
-            </tr>
-            <tr>
-              <td>1°</td>
-              <td>Maurizia Russo</td>
-              <td>211</td>
-            </tr>
+          <table id="championship-classification">
+            <!-- The data will be loaded from javascript -->
           </table>
         </div>
         <button type="button" class="races-btn">NUOVA GARA</button>
