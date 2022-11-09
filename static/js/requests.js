@@ -56,6 +56,8 @@ function loadUser() {
                     body: formData,
                 }).then(response => response.json()).then(data => {
                     if (data){
+                        document.getElementById('championship-name').innerHTML = "\""+data[0].name+"\"";
+
                         var tableRows = "<tr><th id=\"column-1\">Posizione</th><th id=\"column-2\">Pilota</th><th id=\"column-3\">Punti</th></tr>";
                         for (var i = 0; i < data.length; i++){
                             tableRows += "<tr><td>"+(i+1)+"°</td><td>"+data[i].username+"</td><td>"+data[i].points+"</td></tr>"

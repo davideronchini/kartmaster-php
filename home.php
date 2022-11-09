@@ -97,7 +97,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
         </div>
         <div class="championship-top">
           <h2>Campionato recente</h2>
-          <h3>“Nome campionato”</h3>
+          <h3 id="championship-name">“”</h3>
         </div>
         <div class="table">
           <table id="championship-users">
