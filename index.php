@@ -140,6 +140,6 @@
 
     <!-- Link to js file -->
     <script src="./static/js/script.js"></script>
-
+    
 </body>
 </html>

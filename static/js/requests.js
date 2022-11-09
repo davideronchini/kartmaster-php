@@ -15,8 +15,6 @@ function loadUser() {
         const formData = new FormData();
         formData.append('email', session_credentials.email);
     
-        buildChampionshipCards();
-    
         fetch('./php/get_user_by_email.php', {
             method: 'POST',
             header: {
@@ -29,6 +27,7 @@ function loadUser() {
             newChampionshipUsersEmail.push(user.email);
             newChampionshipUsersName.push(user.username);
             buildChampionshipUsersTable();
+            buildChampionshipCards();
             
             if(document.getElementById('set_username') && document.getElementById('set_email') && document.getElementById('set_wins') && document.getElementById('set_pole_positions') && document.getElementById('set_podiums')){
                 document.getElementById('set_username').innerHTML = user.username;
@@ -172,7 +171,6 @@ function addNewChampionshipUsers(){
 }
 
 function buildChampionshipCards(){
-    // TODO: create the cards to display in the championships.php page
     if (user){
         var formData = new FormData();
         formData.append("email", user.email);
@@ -183,8 +181,14 @@ function buildChampionshipCards(){
             },
             body: formData,
         }).then(response => response.json()).then(data => {
-            if (data[0].exists){
-                console.log(data[0]);
+            var cards = "";
+            for (var i = 0; i < data.length; i++){
+                cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+data[i].name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+data[i].races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+data[i].position+"°</p></div><div><h5>Partecipanti</h5><p>"+data[i].participants+"</p></div></div><form action=\"./championship.php?id="+data[i].id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
+            }
+            cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>"
+
+            if (document.getElementById('championships__content')){
+                document.getElementById('championships__content').innerHTML = cards;
             }
         });
     }

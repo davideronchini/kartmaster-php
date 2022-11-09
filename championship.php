@@ -17,22 +17,22 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Altre impostazioni del sito -->
     <title>KART MASTER | Organizza il tuo campionato</title>
-    <link rel="stylesheet" href="style-home.css">
-    <link rel="shortcut icon" href="resources/favicon.webp">
+    <link rel="stylesheet" href="./static/css/style-home.css">
+    <link rel="shortcut icon" href="./static/resources/favicon.webp">
 
   </head>
   <body>
 
     <!-- Header -->
     <div class="header" id="header">
-      <a id="header-control-left" onclick="javascript:history.back()"><img src="resources/back.svg"></a>
-      <img id="header-logo" src="resources/logo.svg" alt="Kart Master, the best platform to manage your kart races">
-      <a id="header-control-right"><img src="resources/menu.svg"></a>
+      <a id="header-control-left" onclick="javascript:history.back()"><img src="./static/resources/back.svg"></a>
+      <img id="header-logo" src="./static/resources/logo.webp" alt="Kart Master, the best platform to manage your kart races">
+      <a id="header-control-right"><img src="./static/resources/menu.svg"></a>
     </div>
 
     <!-- Menu -->
     <div class="menu">
-      <a id="menu-close"><img src="resources/close.svg"></a>
+      <a id="menu-close"><img src="./static/resources/close.svg"></a>
       <a href="#"><h4 class="hover-underline-animation">Contattaci</h4></a>
       <a href="#"><h4 class="hover-underline-animation">Logout</h4></a>
       <a href="#" id="mobile"><h4 class="hover-underline-animation">Privacy</h4></a>
@@ -79,7 +79,7 @@
               <h2>Misanino KCE (RN)</h2>
               <p>21/09/2022</p>
             </div>
-            <img class="race-image" src="resources/misanino.webp">
+            <img class="race-image" src="./static/resources/misanino.webp">
           </div>
         </div>
       </div>
@@ -99,7 +99,8 @@
 
 
     <!-- Link to js file -->
-    <script src="script.js"></script>
+    <script src="./static/js/script.js"></script>
+    <script src="./static/js/requests.js"></script>
 
 </body>
 </html>

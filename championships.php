@@ -45,32 +45,8 @@
     <!-- Content -->
     <a type="button" class="new-championship-btn" href="./new-championship.php">NUOVO CAMPIONATO</a>
     <div class="main-div">
-      <div class="championships__content">
-        <div class="old-championship">
-          <div class="old-championship-top">
-            <h2>Campionato</h2>
-            <h3>"Italian formula"</h3>
-          </div>
-          <div class="old-championship-info">
-            <div>
-              <h5>Gare disputate</h5>
-              <p>3</p>
-            </div>
-            <div>
-              <h5>La mia posizione in classifica</h5>
-              <p>7°</p>
-            </div>
-            <div>
-              <h5>Partecipanti</h5>
-              <p>12</p>
-            </div>
-          </div>
-          <button type="button" class="championship-btn">VEDI</button>
-        </div>
-        <a class="new-championship" href="./new-championship.php">
-          <h4>+</h4>
-          <p>NUOVO CAMPIONATO</p>
-        </a>
+      <div id="championships__content" class="championships__content">
+        <!-- The cards will be loaded from javascript-->  
       </div>
       <div style="height: 11vw;"></div>
     </div>
