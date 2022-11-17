@@ -1,3 +1,13 @@
+<?php 
+
+session_start();
+if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
+  header("location: index.php");
+  exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="it">
   <head>
@@ -43,7 +53,7 @@
     </div>
 
     <!-- Content -->
-    <a type="button" class="new-championship-btn">NUOVA GARA</a>
+    <a onclick="redirect()" type="button" class="new-championship-btn">NUOVA GARA</a>
     <div class="content">
       <div class="championship" style="padding-bottom: 3%;">
         <div class="new" style="display: none;">
@@ -59,7 +69,7 @@
             <!-- The data will be loaded from javascript -->
           </table>
         </div>
-        <button type="button" class="races-btn">NUOVA GARA</button>
+        <button onclick="redirect()" type="button" class="races-btn">NUOVA GARA</button>
       </div>
       <h1 id="races-done">Gare disputate</h1>
       <div class="races">
@@ -92,6 +102,18 @@
     <!-- Link to js file -->
     <script src="./static/js/script.js"></script>
     <script src="./static/js/requests.js"></script>
+
+    <script>
+      function redirect() {
+        let paramString = document.URL.split('?')[1];
+        let queryString = new URLSearchParams(paramString);
+
+        // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+        let championshipId = queryString.entries().next().value[1];
+
+        window.location.href = "./new-race.php?id="+championshipId;
+      }
+    </script>
 
 </body>
 </html>

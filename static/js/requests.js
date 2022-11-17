@@ -1,10 +1,12 @@
 var user;
 var newChampionshipUsersEmail = Array();
 var newChampionshipUsersName = Array();
+var results = Array();
 var session_credentials;
 
 loadUser();
 loadChampionshipPageData();
+displayResultPopupData();
 
 function loadUser() {
     $.ajax({
@@ -29,6 +31,7 @@ function loadUser() {
             newChampionshipUsersName.push(user.username);
             buildChampionshipUsersTable();
             buildChampionshipCards();
+            buildResultsTable();
             
             if(document.getElementById('set_username') && document.getElementById('set_email') && document.getElementById('set_wins') && document.getElementById('set_pole_positions') && document.getElementById('set_podiums')){
                 document.getElementById('set_username').innerHTML = user.username;
@@ -55,7 +58,7 @@ function loadUser() {
                     },
                     body: formData,
                 }).then(response => response.json()).then(data => {
-                    if (data){
+                    if (data && document.getElementById('championship-name')){
                         document.getElementById('championship-name').innerHTML = "\""+data[0].name+"\"";
 
                         var tableRows = "<tr><th id=\"column-1\">Posizione</th><th id=\"column-2\">Pilota</th><th id=\"column-3\">Punti</th></tr>";
@@ -239,4 +242,135 @@ function loadChampionshipPageData() {
             });
         }
     }
+}
+
+function createNewRace(){
+    loadUser();
+
+    if (document.getElementById('new-championship-input').value){
+        var formData = new FormData();
+        formData.append("email", user.email);
+        formData.append('new_championship_name', document.getElementById('new-championship-input').value);
+
+        fetch('./api/create_new_championship.php', {
+            method: 'POST',
+            header: {
+            'Content-Type': 'application/json'
+            },
+            body: formData,
+        }).then(response => response.json()).then(data => {
+            var championshipFormData = new FormData();
+            championshipFormData.append('id_championship', data[0].id);
+            for (var i = 0; i < newChampionshipUsersEmail.length; i++){
+                championshipFormData.append('email', newChampionshipUsersEmail[i]);
+                fetch('./api/email_validation.php', {
+                    method: 'POST',
+                    header: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: championshipFormData,
+                }).then(response => response.json()).then(data => {
+                    if (data[0].exists){
+                        championshipFormData.append('id_user', data[0].id);
+
+                        fetch('./api/add_user_to_championship.php', {
+                            method: 'POST',
+                            header: {
+                            'Content-Type': 'application/json'
+                            },
+                            body: championshipFormData,
+                        })
+                    }
+                });
+            }
+            newChampionshipUsersEmail = [];
+            newChampionshipUsersName = [];
+            window.location.href = "./championships.php";
+        });
+
+        
+    }else {
+        alert("Inserisci il nome del campionato");
+    }
+}
+
+function buildResultsTable(){
+    if (document.getElementById('results-table')) {
+        let paramString = document.URL.split('?')[1];
+        let queryString = new URLSearchParams(paramString);
+
+        // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+        let championshipId = queryString.entries().next().value[1];
+
+        const formData = new FormData();
+        formData.append('id_championship', championshipId);
+        fetch('./api/get_championship_by_id.php', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: formData,
+        }).then(response => response.json()).then(data => {
+            if (data){
+                var tableRows = "";
+                for (var i = 0; i < data.length; i++){
+                    tableRows += "<tr><td class=\"name\"><p>"+data[i].username+"</p></td><td><a onclick=\"buildResultPopup("+championshipId+", '"+data[i].email+"', '"+data[i].username+"')\">+</a></td></tr>";
+                }
+                
+                document.getElementById('results-table').innerHTML = tableRows;
+            }
+        });
+    }
+}
+
+function buildResultPopup(championshipId, email, username) {
+    localStorage.setItem("resultPopupUsername", username);
+    window.location.href = "?id="+championshipId+"&email="+email+"&"+"#change-name-popup";
+}
+
+function displayResultPopupData(){
+    document.getElementById('current-user-username').innerHTML = localStorage.getItem("resultPopupUsername");;
+}
+
+function addResult() {
+    let paramString = document.URL.split('?')[1];
+    let queryString = new URLSearchParams(paramString);
+
+    var params = Array();
+    var iterator =  queryString.entries();
+    params.push(iterator.next().value[1]);
+    params.push(iterator.next().value[1]);
+    
+    let owner_email = params[1];
+
+    const startingPosition = document.getElementById("starting_position");
+    const arrivalPosition = document.getElementById("arrival_position");
+    const bestTime = document.getElementById("best_time");
+    const points = document.getElementById("points");
+
+    if (startingPosition && arrivalPosition && bestTime && points){
+        const result = {
+            "owner_email": owner_email,
+            "starting_position": parseInt(startingPosition.value),
+            "arrival_position": parseInt(arrivalPosition.value),
+            "best_time": bestTime.value,
+            "points": parseInt(points.value),
+        };
+
+        results.push(result);
+        localStorage.setItem("results", results);
+    }
+
+    history.back();
+}
+
+function discardChanges() {
+    localStorage.clear();
+
+    let paramString = document.URL.split('?')[1];
+    let queryString = new URLSearchParams(paramString);
+
+    // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+    let championshipId = queryString.entries().next().value[1];
+    window.location.href = "./championship.php?id="+championshipId;
 }

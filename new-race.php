@@ -33,9 +33,24 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
   </head>
   <body>
 
+    <!-- Popup -->
+    <div id="change-name-popup" class="overlay">
+      <div class="popup" id="new-race-popup-style">
+        <h1 id="current-user-username"></h1>
+        <input id="starting_position" class="new-race-input" type="number" min="0" placeholder="Posizione di partenza">
+        <input id="arrival_position" class="new-race-input" type="number" min="0" placeholder="Posizione di arrivo">
+        <input id="best_time" class="new-race-input" type="text" placeholder="Miglior tempo (es. 1.25.34)">
+        <input id="points" class="new-race-input" type="number" min="0" placeholder="Punti ottenuti">
+        <div id="popup-buttons">
+          <button onclick="addResult()" class="confirm-btn">Conferma</button>
+          <button onclick="javascript:history.back()" class="back-btn">Annulla</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Header -->
     <div class="header" id="header">
-      <a id="header-control-left" onclick="javascript:history.back()"><img src="./static/resources/back.svg"></a>
+      <a id="header-control-left" style="visibility: hidden; cursor: default;" onclick="javascript:history.back()"><img src="./static/resources/back.svg"></a>
       <img id="header-logo" src="./static/resources/logo.webp" alt="Kart Master, the best platform to manage your kart races">
       <a id="header-control-right"><img src="./static/resources/menu.svg"></a>
     </div>
@@ -53,12 +68,37 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
     </div>
 
     <!-- Content -->
-    <a type="button" class="new-championship-btn" href="./new-championship.php">NUOVO CAMPIONATO</a>
-    <div class="main-div">
-      <div id="championships__content" class="championships__content">
-        <!-- The cards will be loaded from javascript-->  
+    <div class="content2">
+      <div class="form">
+        <div class="form-card">
+          <h1>Nuova gara</h1>
+          <h2>Campionato “Italian Formula”</h2>
+          <form>
+            <input list="tracks" placeholder="Seleziona la pista">
+            <datalist id="tracks">
+              <option value="Misanino KCE (RN)">
+              <option value="Kart show Torrette di Fano">
+            </datalist>
+          </form>
+        </div>
+        <button onclick="discardChanges()" type="button" name="button">Annulla</button>
+        <button class="red-btn" type="button" name="button">Conferma</button>
+      </div>
+      <div class="new">
+        <div class="new-top">
+          <h2>Posizioni d'arrivo</h2>
+        </div>
+        <div class="table">
+          <table id ="results-table">
+            <!-- The data will be loaded from javascript -->
+          </table>
+        </div>
       </div>
       <div style="height: 11vw;"></div>
+    </div>
+    <div class="fixed-bottom-buttons">
+      <button class="red-btn" type="button" name="button">Conferma</button>
+      <button onclick="discardChanges()" class="black-btn" type="button" name="button">Annulla</button>
     </div>
 
 
