@@ -11,6 +11,9 @@ if($statement = $connection->prepare($sql)){
     $id_race = $_POST['id_race'];
 
     $statement->execute();
+
+    $data['successful'] = true;
+    echo json_encode($data);
 }else {
     echo "Errore: non è possibile eseguire la query: $sql. " . $connection->error;
 }

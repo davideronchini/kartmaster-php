@@ -319,23 +319,6 @@ function createNewRace(){
             const circuitFormData = new FormData();
             circuitFormData.append("name", raceName);
             circuitFormData.append("id_race", data[0].id);
-            fetch('./api/get_circuit_by_name.php', {
-                method: 'POST',
-                header: {
-                'Content-Type': 'application/json'
-                },
-                body: circuitFormData,
-            }).then(response => response.json()).then(data => {
-                circuitFormData.append("id_circuit", data[0].id);
-                fetch('./api/add_circuit_to_race.php', {
-                    method: 'POST',
-                    header: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: circuitFormData,
-                });
-            });
-
 
             // Set result in results table
             var raceFormData = new FormData();
@@ -358,9 +341,28 @@ function createNewRace(){
                         body: raceFormData,
                     });
                 }
+
                 localStorage.clear();
 
-                window.location.href = "./championship.php?id="+championshipId;
+                // Set id_circuit value
+                fetch('./api/get_circuit_by_name.php', {
+                    method: 'POST',
+                    header: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: circuitFormData,
+                }).then(response => response.json()).then(data => {
+                    circuitFormData.append("id_circuit", data[0].id);
+                    fetch('./api/add_circuit_to_race.php', {
+                        method: 'POST',
+                        header: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: circuitFormData,
+                    }).then(response => response.json()).then(data => {
+                        window.location.href = "./championship.php?id="+championshipId;
+                    });
+                });
             }else{
                 alert("Ti sei dimenticato di inserire i risultati!");
             }

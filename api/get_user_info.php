@@ -62,8 +62,6 @@ if($statement = $connection->prepare($sql)){
                     $email = $_POST['email'];
                 
                     $statement->execute();
-                
-                    $statement->close();
                 }else {
                     echo "Errore nell'esecuzione di $sql. " . $connection->error;
                 }
