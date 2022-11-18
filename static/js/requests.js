@@ -250,7 +250,7 @@ function createNewRace(){
     if (document.getElementById('new-race-input').value){
         var formData = new FormData();
         formData.append('race_name', document.getElementById('new-race-input').value);
-        
+
         let paramString = document.URL.split('?')[1];
         let queryString = new URLSearchParams(paramString);
         // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
@@ -334,20 +334,22 @@ function buildResultPopup(championshipId, email, username) {
 }
 
 function displayResultPopupData(){
-    var username = localStorage.getItem("resultPopupUsername");
-    document.getElementById('current-user-username').innerHTML = username;
+    if (document.getElementById('current-user-username')){
+        var username = localStorage.getItem("resultPopupUsername");
+        document.getElementById('current-user-username').innerHTML = username;
 
-    var email = localStorage.getItem("resultPopupEmail");
-    var results = JSON.parse(localStorage.getItem("results"));
-    if (results){
-        for(var i = 0; i < results.length; i++){
-            if(results[i].owner_email == email) {
-                document.getElementById('starting_position').value = results[i].starting_position;
-                document.getElementById('arrival_position').value = results[i].arrival_position;
-                document.getElementById('best_time').value = results[i].best_time;
-                document.getElementById('points').value = results[i].points;
-            }
-        } 
+        var email = localStorage.getItem("resultPopupEmail");
+        var results = JSON.parse(localStorage.getItem("results"));
+        if (results){
+            for(var i = 0; i < results.length; i++){
+                if(results[i].owner_email == email) {
+                    document.getElementById('starting_position').value = results[i].starting_position;
+                    document.getElementById('arrival_position').value = results[i].arrival_position;
+                    document.getElementById('best_time').value = results[i].best_time;
+                    document.getElementById('points').value = results[i].points;
+                }
+            } 
+        }
     }
 }
 
