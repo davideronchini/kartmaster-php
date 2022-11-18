@@ -189,12 +189,49 @@ function buildChampionshipCards(){
         }).then(response => response.json()).then(data => {
             var cards = "";
             for (var i = 0; i < data.length; i++){
-                cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+data[i].name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+data[i].races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+data[i].position+"°</p></div><div><h5>Partecipanti</h5><p>"+data[i].participants+"</p></div></div><form action=\"./championship.php?id="+data[i].id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
-            }
-            cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>"
+                var length = data.length;
 
-            if (document.getElementById('championships__content')){
-                document.getElementById('championships__content').innerHTML = cards;
+                formData.append("id_championship", data[i].id);
+
+                var tmp;
+                var position = 0;
+                var dt = data[i];
+                fetch('./api/get_championship_by_id.php', {
+                    method: 'POST',
+                    header: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: formData,
+                }).then(response => response.json()).then(data => {
+                    // Find the user position in the current championship classification
+                    position = 0;
+                    for (var i = 0; i < data.length; i++){
+                        if (data[i].email == user.email){
+                            position = i+1;
+                            break;
+                        }
+                    }
+        
+                    // Find the number of races and partecipants
+                    fetch('./api/get_championship_info.php', {
+                        method: 'POST',
+                        header: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: formData,
+                    }).then(response => response.json()).then(data => {
+                        tmp = data;
+                        cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
+                        if (i == length - 1){
+                            cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
+                
+                            if (document.getElementById('championships__content')){
+                                
+                                document.getElementById('championships__content').innerHTML = cards;
+                            }
+                        }
+                    });
+                });
             }
         });
     }

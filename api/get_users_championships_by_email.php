@@ -20,9 +20,6 @@ if($statement = $connection->prepare($sql)){
             $tmp;
             $tmp['id'] = $row['id_championship'];
             $tmp['name'] = $row['name'];
-            $tmp['races'] = 0;
-            $tmp['position'] = 0;
-            $tmp['participants'] = 0;
             
             array_push($data, $tmp);
         }
