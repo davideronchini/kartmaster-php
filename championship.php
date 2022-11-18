@@ -74,14 +74,8 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
       <h1 id="races-done">Gare disputate</h1>
       <div class="races">
         <h2>Gare disputate</h2>
-        <div class="races-list">
-          <div class="race">
-            <div class="race-texts">
-              <h2>Misanino KCE (RN)</h2>
-              <p>21/09/2022</p>
-            </div>
-            <img class="race-image" src="./static/resources/misanino.webp">
-          </div>
+        <div id="races-list" class="races-list">
+          <!-- The races will be loaded from javascript -->
         </div>
       </div>
       <div style="height: 11vw;"></div>

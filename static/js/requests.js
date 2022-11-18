@@ -31,15 +31,27 @@ function loadUser() {
             newChampionshipUsersName.push(user.username);
             buildChampionshipUsersTable();
             buildChampionshipCards();
+            buildChampionshipPageRaces();
             buildResultsTable();
             
-            if(document.getElementById('set_username') && document.getElementById('set_email') && document.getElementById('set_wins') && document.getElementById('set_pole_positions') && document.getElementById('set_podiums')){
+            if(document.getElementById('set_username') && document.getElementById('set_email')){
                 document.getElementById('set_username').innerHTML = user.username;
                 document.getElementById('set_email').innerHTML = user.email;
-                document.getElementById('set_wins').innerHTML = user.wins;
-                document.getElementById('set_pole_positions').innerHTML = user.pole_positions;
-                document.getElementById('set_podiums').innerHTML = user.podiums;
             }
+
+            fetch('./api/get_user_info.php', {
+                method: 'POST',
+                header: {
+                    'Content-Type': 'application/json'
+                },
+                body: formData,
+            }).then(response => response.json()).then(data => {
+                if(document.getElementById('set_wins') && document.getElementById('set_pole_positions') && document.getElementById('set_podiums')){
+                    document.getElementById('set_wins').innerHTML = data.wins;
+                    document.getElementById('set_pole_positions').innerHTML = data.pole_positions;
+                    document.getElementById('set_podiums').innerHTML = data.podiums;
+                }
+            });
         });
     
         fetch('./api/get_most_recent_championship_by_email.php', {
@@ -284,9 +296,10 @@ function loadChampionshipPageData() {
 function createNewRace(){
     loadUser();
 
-    if (document.getElementById('new-race-input').value){
+    var raceName = document.getElementById('new-race-input').value;
+    if (raceName){
         var formData = new FormData();
-        formData.append('race_name', document.getElementById('new-race-input').value);
+        formData.append('race_name', raceName);
 
         let paramString = document.URL.split('?')[1];
         let queryString = new URLSearchParams(paramString);
@@ -301,6 +314,30 @@ function createNewRace(){
             },
             body: formData,
         }).then(response => response.json()).then(data => {
+
+            // Set id_circuit value
+            const circuitFormData = new FormData();
+            circuitFormData.append("name", raceName);
+            circuitFormData.append("id_race", data[0].id);
+            fetch('./api/get_circuit_by_name.php', {
+                method: 'POST',
+                header: {
+                'Content-Type': 'application/json'
+                },
+                body: circuitFormData,
+            }).then(response => response.json()).then(data => {
+                circuitFormData.append("id_circuit", data[0].id);
+                fetch('./api/add_circuit_to_race.php', {
+                    method: 'POST',
+                    header: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: circuitFormData,
+                });
+            });
+
+
+            // Set result in results table
             var raceFormData = new FormData();
             raceFormData.append('id_race', data[0].id);
 
@@ -328,8 +365,6 @@ function createNewRace(){
                 alert("Ti sei dimenticato di inserire i risultati!");
             }
         });
-
-        
     }else {
         alert("Inserisci il nome del campionato");
     }
@@ -431,4 +466,53 @@ function discardChanges() {
     // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
     let championshipId = queryString.entries().next().value[1];
     window.location.href = "./championship.php?id="+championshipId;
+}
+
+function buildChampionshipPageRaces() {
+    if (user && document.getElementById('races-list')){
+        let paramString = document.URL.split('?')[1];
+        let queryString = new URLSearchParams(paramString);
+
+        // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+        let championshipId = queryString.entries().next().value[1];
+
+        const formData = new FormData();
+        formData.append("id", championshipId);
+        formData.append("email", user.email);
+
+        var races = "";
+        var length;
+        var date;
+        fetch('./api/get_races_by_championship_id.php', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            },
+            body: formData,
+        }).then(response => response.json()).then(data => {
+            if (data){
+                length = data.length;
+                for (var i = 0; i < data.length; i++){
+                    date = data[i].date;
+
+                    const circuitFormData = new FormData();
+                    circuitFormData.append('id', data[0].id_circuit);
+                    fetch('./api/get_circuit_by_id.php', {
+                        method: 'POST',
+                        header: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: circuitFormData,
+                    }).then(response => response.json()).then(data => {
+                        if (data){
+                            var image = data[0].image;
+                            races += "<div class=\"race\"><div class=\"race-texts\"><h2>"+data[0].name+"</h2><p>"+date+"</p></div><img class=\"race-image\" src=\"data:image/jpeg;base64,"+image+"\"></div>"
+                            
+                            if (i == length) document.getElementById('races-list').innerHTML = races;
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

@@ -27,24 +27,25 @@ if($statement = $connection->prepare($sql)){
             //TODO: fai un for dove scorri l'array di records della tabella result dove sommi i punti dei record con attributo email = $row['email']
             $points = 0;
 
-            $sql = "SELECT owner_email, points FROM results WHERE id = (SELECT id FROM races WHERE id_championship = ?) AND owner_email = ?";
+            $sql = "SELECT * FROM races INNER JOIN results ON results.id_race = races.id WHERE races.id_championship = ? AND results.owner_email = ?";
 
-            if($statement = $connection->prepare($sql)){
-                $statement->bind_param("is", $id, $owner_email);
+            if($statement1 = $connection->prepare($sql)){
+                $statement1->bind_param("is", $id, $owner_email);
 
-                $id = $row['id_championship'];
+                $id = $_POST['id_championship'];
                 $owner_email = $row['email'];
 
-                $statement->execute();
-
-                $result = $statement->get_result();
-                if ($result->num_rows > 0){
-                    while ($row = $result->fetch_array(MYSQLI_ASSOC)){
-                        $points += $row['points'];
+                $statement1->execute();
+                $result1 = $statement1->get_result();
+                if ($result1->num_rows > 0){
+                    while ($row1 = $result1->fetch_array(MYSQLI_ASSOC)){
+                        $points += $row1['points'];
                     }
                 }else {
                     echo "Non ci sono righe disponibili -> $sql. ";
                 }
+
+                $statement1->close();
             }else {
                 echo "Errore nell'esecuzione di $sql. " . $connection->error;
             }
