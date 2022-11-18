@@ -7,7 +7,7 @@ $sql = "SELECT * FROM circuits WHERE id = ?";
 if($statement = $connection->prepare($sql)){
     $statement->bind_param("i", $id);
 
-    $id = $_POST['id'];
+    $id =$_POST['id'];
 
     $statement->execute();
 

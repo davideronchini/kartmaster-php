@@ -7,6 +7,7 @@ var session_credentials;
 loadUser();
 loadChampionshipPageData();
 displayResultPopupData();
+buildCircuitsOptionTags();
 
 function loadUser() {
     $.ajax({
@@ -498,7 +499,7 @@ function buildChampionshipPageRaces() {
                     date = data[i].date;
 
                     const circuitFormData = new FormData();
-                    circuitFormData.append('id', data[0].id_circuit);
+                    circuitFormData.append('id', data[i].id_circuit);
                     fetch('./api/get_circuit_by_id.php', {
                         method: 'POST',
                         header: {
@@ -517,4 +518,125 @@ function buildChampionshipPageRaces() {
             }
         });
     }
+}
+
+function buildCircuitsOptionTags() {
+    var datalist = document.getElementById('new-race-input');
+    if (datalist){
+
+        fetch('./api/get_circuits.php', {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            if (data){
+                var j = 0;
+                var options = "<option>Seleziona la pista</option>"
+
+                options += "<optgroup label=\"Valle d'Aosta\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Valle d'Aosta") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Piemonte\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Piemonte") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Liguria\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Liguria") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Lombardia\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Lombardia") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Trentino Alto Adige\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Trentino Alto Adige") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Veneto\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Veneto") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Friuli Venezia Giulia\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Friuli Venezia Giulia") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Emilia Romagna\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Emilia Romagna") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Toscana\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Toscana") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Umbria\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Umbria") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Marche\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Marche") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Lazio\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Lazio") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Abruzzo\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Abruzzo") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Molise\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Molise") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Campania\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Campania") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Puglia\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Puglia") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Basilicata\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Basilicata") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Calabria\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Calabria") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Sicilia\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Sicilia") options += "<option>"+data[i].name+"</option>";
+                }
+
+                options += "<optgroup label=\"Sardegna\"></optgroup>";
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].country == "Sardegna") options += "<option>"+data[i].name+"</option>";
+                }
+
+                datalist.innerHTML = options;
+            }
+        });
+    }
+    
 }

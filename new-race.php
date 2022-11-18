@@ -74,11 +74,9 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
           <h1>Nuova gara</h1>
           <h2>Campionato “Italian Formula”</h2>
           <form>
-            <input id="new-race-input" list="tracks" placeholder="Seleziona la pista">
-            <datalist id="tracks">
-              <option value="Misanino KCE (RN)">
-              <option value="Kart show Torrette di Fano">
-            </datalist>
+            <select id="new-race-input" style="width: 100%; height: 6vh; border-radius: 5px; border: 2px solid #F6F6F6">
+              <!-- The options tags will be loaded from javascript -->
+            </select>
           </form>
         </div>
         <button onclick="discardChanges()" type="button" name="button">Annulla</button>
