@@ -74,7 +74,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
           <h1>Nuova gara</h1>
           <h2>Campionato “Italian Formula”</h2>
           <form>
-            <input list="tracks" placeholder="Seleziona la pista">
+            <input id="new-race-input" list="tracks" placeholder="Seleziona la pista">
             <datalist id="tracks">
               <option value="Misanino KCE (RN)">
               <option value="Kart show Torrette di Fano">
@@ -82,7 +82,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
           </form>
         </div>
         <button onclick="discardChanges()" type="button" name="button">Annulla</button>
-        <button class="red-btn" type="button" name="button">Conferma</button>
+        <button onclick="createNewRace()" class="red-btn" type="button" name="button">Conferma</button>
       </div>
       <div class="new">
         <div class="new-top">
@@ -97,7 +97,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
       <div style="height: 11vw;"></div>
     </div>
     <div class="fixed-bottom-buttons">
-      <button class="red-btn" type="button" name="button">Conferma</button>
+      <button onclick="createNewRace()" class="red-btn" type="button" name="button">Conferma</button>
       <button onclick="discardChanges()" class="black-btn" type="button" name="button">Annulla</button>
     </div>
 

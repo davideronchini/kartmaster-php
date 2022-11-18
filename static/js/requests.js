@@ -247,45 +247,49 @@ function loadChampionshipPageData() {
 function createNewRace(){
     loadUser();
 
-    if (document.getElementById('new-championship-input').value){
+    if (document.getElementById('new-race-input').value){
         var formData = new FormData();
-        formData.append("email", user.email);
-        formData.append('new_championship_name', document.getElementById('new-championship-input').value);
+        formData.append('race_name', document.getElementById('new-race-input').value);
+        
+        let paramString = document.URL.split('?')[1];
+        let queryString = new URLSearchParams(paramString);
+        // queryString.entries().next().value returns the first url parameter -> [0] returns its name and [1] returns its value
+        let championshipId = queryString.entries().next().value[1];
+        formData.append('id_championship', championshipId);
 
-        fetch('./api/create_new_championship.php', {
+        fetch('./api/create_new_race.php', {
             method: 'POST',
             header: {
             'Content-Type': 'application/json'
             },
             body: formData,
         }).then(response => response.json()).then(data => {
-            var championshipFormData = new FormData();
-            championshipFormData.append('id_championship', data[0].id);
-            for (var i = 0; i < newChampionshipUsersEmail.length; i++){
-                championshipFormData.append('email', newChampionshipUsersEmail[i]);
-                fetch('./api/email_validation.php', {
-                    method: 'POST',
-                    header: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: championshipFormData,
-                }).then(response => response.json()).then(data => {
-                    if (data[0].exists){
-                        championshipFormData.append('id_user', data[0].id);
+            var raceFormData = new FormData();
+            raceFormData.append('id_race', data[0].id);
 
-                        fetch('./api/add_user_to_championship.php', {
-                            method: 'POST',
-                            header: {
-                            'Content-Type': 'application/json'
-                            },
-                            body: championshipFormData,
-                        })
-                    }
-                });
+            results = JSON.parse(localStorage.getItem("results"));
+            if (results){
+                for (var i = 0; i < results.length; i++){
+                    raceFormData.append('owner_email', results[i].owner_email);
+                    raceFormData.append('best_time', results[i].best_time);
+                    raceFormData.append('starting_position', results[i].starting_position);
+                    raceFormData.append('arrival_position', results[i].arrival_position);
+                    raceFormData.append('points', results[i].points);
+
+                    fetch('./api/create_result.php', {
+                        method: 'POST',
+                        header: {
+                        'Content-Type': 'application/json'
+                        },
+                        body: raceFormData,
+                    });
+                }
+                localStorage.clear();
+
+                window.location.href = "./championship.php?id="+championshipId;
+            }else{
+                alert("Ti sei dimenticato di inserire i risultati!");
             }
-            newChampionshipUsersEmail = [];
-            newChampionshipUsersName = [];
-            window.location.href = "./championships.php";
         });
 
         
@@ -325,11 +329,26 @@ function buildResultsTable(){
 
 function buildResultPopup(championshipId, email, username) {
     localStorage.setItem("resultPopupUsername", username);
+    localStorage.setItem("resultPopupEmail", email);
     window.location.href = "?id="+championshipId+"&email="+email+"&"+"#change-name-popup";
 }
 
 function displayResultPopupData(){
-    document.getElementById('current-user-username').innerHTML = localStorage.getItem("resultPopupUsername");;
+    var username = localStorage.getItem("resultPopupUsername");
+    document.getElementById('current-user-username').innerHTML = username;
+
+    var email = localStorage.getItem("resultPopupEmail");
+    var results = JSON.parse(localStorage.getItem("results"));
+    if (results){
+        for(var i = 0; i < results.length; i++){
+            if(results[i].owner_email == email) {
+                document.getElementById('starting_position').value = results[i].starting_position;
+                document.getElementById('arrival_position').value = results[i].arrival_position;
+                document.getElementById('best_time').value = results[i].best_time;
+                document.getElementById('points').value = results[i].points;
+            }
+        } 
+    }
 }
 
 function addResult() {
@@ -358,7 +377,7 @@ function addResult() {
         };
 
         results.push(result);
-        localStorage.setItem("results", results);
+        localStorage.setItem("results", JSON.stringify(results));
     }
 
     history.back();
