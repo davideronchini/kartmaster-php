@@ -58,7 +58,7 @@
           <input id="username"  name="username" type="text" placeholder="Nome utente" required>
           <input id="email" name="email" type="text" placeholder="Email" required>
           <input id="password" name="password" type="password" placeholder="Password" required>
-          <p>Cliccando “inizia” accetti i <a href="#">Termini di Servizio</a> e l’<a href="#">informativa sulla privacy</a></p>
+          <p>Cliccando “inizia” accetti i <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions">Termini di Servizio</a> e l’<a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy">informativa sulla privacy</a></p>
           <div>
             <button type="submit" style="border: none;" class="log-btn">Inizia</button>
           </div>
@@ -131,10 +131,10 @@
         <h2>RECORD THE RESULTS OF YOUR RACES</h2>
       </a>
       <div class="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Cookies</a>
-        <a href="#">Termini e condizioni</a>
-        <a href="#">Disclaimer</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy">Privacy</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/cookies-policy">Cookies</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions">Termini e condizioni</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/disclaimer">Disclaimer</a>
       </div>
     </div>
 

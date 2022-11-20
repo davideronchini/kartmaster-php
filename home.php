@@ -56,12 +56,12 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
     <!-- Menu -->
     <div class="menu">
       <a id="menu-close"><img src="./static/resources/close.svg"></a>
-      <a href="#"><h4 class="hover-underline-animation">Contattaci</h4></a>
+      <a href="mailto:hap.kartmaster@gmail.com"><h4 class="hover-underline-animation">Contattaci</h4></a>
       <a href="./api/logout.php"><h4 class="hover-underline-animation">Logout</h4></a>
-      <a href="#" id="mobile"><h4 class="hover-underline-animation">Privacy</h4></a>
-      <a href="#" id="mobile"><h4 class="hover-underline-animation">Termini e condizioni</h4></a>
-      <a href="#" id="mobile"><h4 class="hover-underline-animation">Cookies</h4></a>
-      <a href="#" id="mobile"><h4 class="hover-underline-animation">Disclaimer</h4></a>
+      <a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy" id="mobile"><h4 class="hover-underline-animation">Privacy</h4></a>
+      <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions" id="mobile"><h4 class="hover-underline-animation">Termini e condizioni</h4></a>
+      <a target="blank" href="https://davideronchini.github.io/kart-master/cookies-policy"><h4 class="hover-underline-animation">Cookies</h4></a>
+      <a target="blank" href="https://davideronchini.github.io/kart-master/disclaimer" id="mobile"><h4 class="hover-underline-animation">Disclaimer</h4></a>
       <a onclick="deleteUser()"><h4 class="hover-underline-animation"><span>Elimina account</span></h4></a>
     </div>
 
@@ -78,15 +78,15 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
         <div class="user-info-bottom">
           <div class="informations">
             <h2>Vittorie</h2>
-            <p id="set_wins">3</p>
+            <p id="set_wins">0</p>
           </div>
           <div class="informations">
             <h2>Pole positions</h2>
-            <p id="set_pole_positions">1</p>
+            <p id="set_pole_positions">0</p>
           </div>
           <div class="informations">
             <h2>Podi</h2>
-            <p id="set_podiums">4</p>
+            <p id="set_podiums">0</p>
           </div>
         </div>
       </div>
@@ -112,10 +112,10 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
     <!-- Footer  -->
     <div class="footer">
       <div class="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Cookies</a>
-        <a href="#">Termini e condizioni</a>
-        <a href="#">Disclaimer</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy">Privacy</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/cookies-policy">Cookies</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions">Termini e condizioni</a>
+        <a target="blank" href="https://davideronchini.github.io/kart-master/disclaimer">Disclaimer</a>
       </div>
     </div>
 

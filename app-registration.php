@@ -17,28 +17,26 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- Altre impostazioni del sito -->
     <title>KART MASTER | Organizza il tuo campionato</title>
-    <link rel="stylesheet" href="style-android.css">
-    <link rel="shortcut icon" href="resources/favicon.webp">
+    <link rel="stylesheet" href="./static/css/style-android.css">
+    <link rel="shortcut icon" href="./static/resources/favicon.webp">
 
   </head>
   <body>
 
-    <img class="logo" src="resources/kart-logo.webp">
-    <h1>Accedi</h1>
-    <input class="input" type="text" placeholder="Nome utente">
-    <input class="input" type="password" placeholder="Password">
-    <div class="checkbox">
-      <label class="container">
-        <input type="checkbox">
-        <span class="checkmark"></span>
-      </label><h4>Ricordami</h4>
-    </div>
-    <button href="#" class="log-btn">Continua</button>
-    <p>Non hai un account? <a href="#">Registrati</a></p>
+    <img class="logo" src="./static/resources/kart-logo.webp">
+    <h1>Registrati</h1>
+    <form action="./api/register.php" method="POST">
+      <input id="username" name="username" class="input" type="text" placeholder="Nome utente">
+      <input id="email" name="email" class="input" type="email" placeholder="Email">
+      <input id="password" name="password" class="input" type="password" placeholder="Password">
+      <p>Cliccando “Continua” accetti i <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions">Termini di Servizio</a> e l’<a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy">informativa sulla privacy</a></p>
+      <button type="submit" class="log-btn">Continua</button>
+      <p>Hai già un account? <a href="./app-login.php">Accedi</a></p>
+    </form>
 
 
     <!-- Link to js file -->
-    <script src="script.js"></script>
+    <script src="./static/js/script.js"></script>
     <script type="text/javascript">
 
       //Android settings
@@ -49,7 +47,7 @@
         $("body").attr("display","none");
       }
       else {
-        window.location.href = "https://kartmaster.herokuapp.com/";
+        window.location.href = "./index.php#register-popup";
       }
 
     </script>
