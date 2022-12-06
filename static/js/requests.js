@@ -1,6 +1,7 @@
 var user;
 var newChampionshipUsersEmail = Array();
 var newChampionshipUsersName = Array();
+var newChampionshipUsersId = Array();
 var results = Array();
 var session_credentials;
 
@@ -28,8 +29,6 @@ function loadUser() {
         }).then(response => response.json()).then(data => {
             user = data[0];
     
-            newChampionshipUsersEmail.push(user.email);
-            newChampionshipUsersName.push(user.username);
             buildChampionshipUsersTable();
             buildChampionshipCards();
             buildChampionshipPageRaces();
@@ -120,9 +119,8 @@ function changeUsername() {
 }
 
 function createNewChampionship(){
-    loadUser();
-
     if (document.getElementById('new-championship-input').value){
+        console.log("baci");
         var formData = new FormData();
         formData.append("email", user.email);
         formData.append('new_championship_name', document.getElementById('new-championship-input').value);
@@ -136,30 +134,21 @@ function createNewChampionship(){
         }).then(response => response.json()).then(data => {
             var championshipFormData = new FormData();
             championshipFormData.append('id_championship', data[0].id);
-            for (var i = 0; i < newChampionshipUsersEmail.length; i++){
-                championshipFormData.append('email', newChampionshipUsersEmail[i]);
-                fetch('./api/email_validation.php', {
+            for (var i = 0; i < newChampionshipUsersId.length; i++){
+                championshipFormData.append('id_user', newChampionshipUsersId[i]);
+
+                fetch('./api/add_user_to_championship.php', {
                     method: 'POST',
                     header: {
                     'Content-Type': 'application/json'
                     },
                     body: championshipFormData,
-                }).then(response => response.json()).then(data => {
-                    if (data[0].exists){
-                        championshipFormData.append('id_user', data[0].id);
-
-                        fetch('./api/add_user_to_championship.php', {
-                            method: 'POST',
-                            header: {
-                            'Content-Type': 'application/json'
-                            },
-                            body: championshipFormData,
-                        })
-                    }
                 });
             }
-            newChampionshipUsersEmail = [];
-            newChampionshipUsersName = [];
+            newChampionshipUsersId = new Array();
+            newChampionshipUsersEmail = new Array();
+            newChampionshipUsersName = new Array();
+            
             window.location.href = "./championships.php";
         });
 
@@ -183,6 +172,7 @@ function addNewChampionshipUsers(){
     }).then(response => response.json()).then(data => {
         if (data[0].exists){
             newChampionshipUsersName.push(data[0].username);
+            newChampionshipUsersId.push(data[0].id);
             history.back();
             buildChampionshipUsersTable();
         }
@@ -191,7 +181,7 @@ function addNewChampionshipUsers(){
 
 function buildChampionshipCards(){
     if (user){
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append("email", user.email);
         fetch('./api/get_users_championships_by_email.php', {
             method: 'POST',
@@ -201,56 +191,68 @@ function buildChampionshipCards(){
             body: formData,
         }).then(response => response.json()).then(data => {
             var cards = "";
-            for (var i = 0; i < data.length; i++){
-                var length = data.length;
+            var length = data.length;
+            if (length != 0){
+                for (var i = 0; i < length; i++){
+                    formData.append("id_championship", data[i].id);
 
-                formData.append("id_championship", data[i].id);
-
-                var tmp;
-                var position = 0;
-                var dt = data[i];
-                fetch('./api/get_championship_by_id.php', {
-                    method: 'POST',
-                    header: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: formData,
-                }).then(response => response.json()).then(data => {
-                    // Find the user position in the current championship classification
-                    position = 0;
-                    for (var i = 0; i < data.length; i++){
-                        if (data[i].email == user.email){
-                            position = i+1;
-                            break;
-                        }
-                    }
-        
-                    // Find the number of races and partecipants
-                    fetch('./api/get_championship_info.php', {
+                    var tmp;
+                    var position = 0;
+                    const dt = data[i];
+                    fetch('./api/get_championship_by_id.php', {
                         method: 'POST',
                         header: {
                         'Content-Type': 'application/json'
                         },
                         body: formData,
-                    }).then(response => response.json()).then(data => {
-                        tmp = data;
-                        cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
-                        if (i == length - 1){
-                            cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
-                
-                            if (document.getElementById('championships__content')){
-                                
-                                document.getElementById('championships__content').innerHTML = cards;
+                    }).then(response1 => response1.json()).then(data1 => {
+                        // Find the user position in the current championship classification
+                        position = 0;
+                        for (var i = 0; i < data1.length; i++){
+                            if (data1[i].email == user.email){
+                                position = i+1;
+                                //break;
                             }
                         }
+            
+                        // Find the number of races and partecipants
+                        fetch('./api/get_championship_info.php', {
+                            method: 'POST',
+                            header: {
+                            'Content-Type': 'application/json'
+                            },
+                            body: formData,
+                        }).then(response2 => response2.json()).then(data2 => {
+                            tmp = data2;
+                            cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
+                            if (i == length || length == 0){
+                                cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
+                    
+                                if (document.getElementById('championships__content')){
+                                    
+                                    document.getElementById('championships__content').innerHTML = cards;
+                                }
+                            }
+                        });
                     });
-                });
+                }
+            }else {
+                cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
+                    
+                if (document.getElementById('championships__content')){
+                    
+                    document.getElementById('championships__content').innerHTML = cards;
+                }
             }
         });
     }
 }
 
 function buildChampionshipUsersTable(){
+    newChampionshipUsersId.push(user.id);
+    newChampionshipUsersEmail.push(user.email);
+    newChampionshipUsersName.push(user.username);
+
     var table = "";
     for (var i = 0; i < newChampionshipUsersName.length; i++){
     table += "<tr><td class=\"name\"><p>"+newChampionshipUsersName[i]+"</p></td><td><a href=\"#\">×</a></td></tr>";
@@ -295,8 +297,6 @@ function loadChampionshipPageData() {
 }
 
 function createNewRace(){
-    loadUser();
-
     var raceName = document.getElementById('new-race-input').value;
     if (raceName){
         var formData = new FormData();

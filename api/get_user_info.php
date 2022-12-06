@@ -17,8 +17,8 @@ if($statement = $connection->prepare($sql)){
     $statement->execute();
 
     $result = $statement->get_result();
+    $data = [];
     if ($result->num_rows > 0){
-        $data = [];
         while ($row = $result->fetch_array(MYSQLI_ASSOC)){
             if ($row['starting_position'] == 1) $pole_positions++;
             if ($row['arrival_position'] >= 1 && $row['arrival_position'] <= 3) $podiums++;
@@ -28,11 +28,11 @@ if($statement = $connection->prepare($sql)){
         $data['wins'] = $wins;
         $data['pole_positions'] = $pole_positions;
         $data['podiums'] = $podiums; 
-
-        echo json_encode($data);
     }else {
-        echo "Non ci sono righe disponibili";
+        // Non ci sono righe disponibili
     }
+
+    echo json_encode($data);
     
 }else {
     echo "Errore nell'esecuzione di $sql. " . $connection->error;

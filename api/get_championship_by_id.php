@@ -23,16 +23,15 @@ if($statement = $connection->prepare($sql)){
             $tmp['username'] = $row['username'];
             $tmp['id_championship'] = $row['id_championship'];
             $tmp['name'] = $row['name'];
-            $tmp['date'] = $row['date'];
-            //TODO: fai un for dove scorri l'array di records della tabella result dove sommi i punti dei record con attributo email = $row['email']
-            $points = 0;
+            $tmp['date'] = $row['date'];            
 
             $sql = "SELECT * FROM races INNER JOIN results ON results.id_race = races.id WHERE races.id_championship = ? AND results.owner_email = ?";
 
+            $points = 0;
             if($statement1 = $connection->prepare($sql)){
-                $statement1->bind_param("is", $id, $owner_email);
+                $statement1->bind_param("is", $id1, $owner_email);
 
-                $id = $_POST['id_championship'];
+                $id1 = $row['id_championship'];
                 $owner_email = $row['email'];
 
                 $statement1->execute();
@@ -41,13 +40,9 @@ if($statement = $connection->prepare($sql)){
                     while ($row1 = $result1->fetch_array(MYSQLI_ASSOC)){
                         $points += $row1['points'];
                     }
-                }else {
-                    echo "Non ci sono righe disponibili -> $sql. ";
                 }
 
                 $statement1->close();
-            }else {
-                echo "Errore nell'esecuzione di $sql. " . $connection->error;
             }
 
             $tmp['points'] = $points;
@@ -56,10 +51,12 @@ if($statement = $connection->prepare($sql)){
         }
 
         // Sort the array by points
-        usort($data, fn($a, $b) => $a['points'] <=> $b['points']);
+        usort($data, function ($item1, $item2) {
+            return $item1['points'] <=> $item2['points'];
+        });
         // Reverse the array
         $data = array_reverse($data);
-
+        
         echo json_encode($data);
     }else {
         echo "Non ci sono righe disponibili";

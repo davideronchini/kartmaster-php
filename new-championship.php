@@ -75,7 +75,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
         <button onclick="javascript:history.back()" type="button" name="button">Annulla</button>
         <button onclick="createNewChampionship()" class="red-btn" type="button" name="button">Conferma</button>
       </div>
-      <a type="button" class="new-racer-btn">NUOVA GARA</a>
+      <a href="#change-name-popup" class="new-racer-btn">NUOVO PARTECIPANTE</a>
       <div class="new">
         <div class="new-top">
           <h2>Lista partecipanti</h2>

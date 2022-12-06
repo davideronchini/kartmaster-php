@@ -14,8 +14,8 @@ if($statement = $connection->prepare($sql)){
     $statement->execute();
 
     $result = $statement->get_result();
+    $data = [];
     if ($result->num_rows > 0){
-        $data = [];
         while ($row = $result->fetch_array(MYSQLI_ASSOC)){
             $tmp;
             $tmp['id'] = $row['id_championship'];
@@ -23,17 +23,16 @@ if($statement = $connection->prepare($sql)){
             
             array_push($data, $tmp);
         }
-
-        echo json_encode($data);
     }else {
-        echo "Non ci sono righe disponibili";
+        //echo "Non ci sono righe disponibili";
     }
-
-    $statement->close();
+    
+    echo json_encode($data);
 }else {
     echo "Errore nell'esecuzione di $sql. " . $connection->error;
 }
 
+$statement->close();
 $connection->close();
 
 ?>
