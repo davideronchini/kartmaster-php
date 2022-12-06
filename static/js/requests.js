@@ -47,9 +47,9 @@ function loadUser() {
                 body: formData,
             }).then(response => response.json()).then(data => {
                 if(document.getElementById('set_wins') && document.getElementById('set_pole_positions') && document.getElementById('set_podiums')){
-                    document.getElementById('set_wins').innerHTML = data.wins;
-                    document.getElementById('set_pole_positions').innerHTML = data.pole_positions;
-                    document.getElementById('set_podiums').innerHTML = data.podiums;
+                    if (data.wins) document.getElementById('set_wins').innerHTML = data.wins;
+                    if (data.pole_positions) document.getElementById('set_pole_positions').innerHTML = data.pole_positions;
+                    if (data.podiums) document.getElementById('set_podiums').innerHTML = data.podiums;
                 }
             });
         });
