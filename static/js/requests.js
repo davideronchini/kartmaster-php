@@ -225,7 +225,7 @@ function buildChampionshipCards(){
                         }).then(response2 => response2.json()).then(data2 => {
                             tmp = data2;
                             cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form><button onclick=\"deleteChampionship("+user.id+", "+dt.id+")\" class=\"championship-btn\" style=\"background-color: transparent; color: #292829; opacity: 0.7;\">Elimina</button></div>";
-                            if (i == length || length == 0){
+                            if (i == length || length <= 1){
                                 cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
                     
                                 if (document.getElementById('championships__content')){
@@ -265,9 +265,9 @@ function deleteChampionship(id_user, id_championship){
 }
 
 function buildChampionshipUsersTable(){
-    newChampionshipUsersId.push(user.id);
-    newChampionshipUsersEmail.push(user.email);
-    newChampionshipUsersName.push(user.username);
+    if (!newChampionshipUsersId.includes(user.id)) newChampionshipUsersId.push(user.id);
+    if (!newChampionshipUsersEmail.includes(user.email)) newChampionshipUsersEmail.push(user.email);
+    if (!newChampionshipUsersName.includes(user.username)) newChampionshipUsersName.push(user.username);
 
     var table = "";
     for (var i = 0; i < newChampionshipUsersName.length; i++){
