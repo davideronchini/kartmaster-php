@@ -44,7 +44,7 @@
           <input name="password" id="password" type="password" placeholder="Password" required>
           <p>Non hai un account? <a href="index.php#register-popup">Registrati ora</a></p>
           <div>
-            <button type="submit" style="border: none;" class="log-btn">Inizia</button>
+            <button type="submit" style="border: none; width: 100%;" class="log-btn">Inizia</button>
           </div>
         </form>
       </div>
@@ -60,7 +60,7 @@
           <input id="password" name="password" type="password" placeholder="Password" required>
           <p>Cliccando “inizia” accetti i <a target="blank" href="https://davideronchini.github.io/kart-master/terms-and-conditions">Termini di Servizio</a> e l’<a target="blank" href="https://davideronchini.github.io/kart-master/privacy-policy">informativa sulla privacy</a></p>
           <div>
-            <button type="submit" style="border: none;" class="log-btn">Inizia</button>
+            <button type="submit" style="border: none; width: 100%;" class="log-btn">Inizia</button>
           </div>
         </form>
       </div>
