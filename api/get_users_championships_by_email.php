@@ -4,7 +4,7 @@ require_once("./config.php");
 
 $sql = "SELECT users.id AS id_user, users.email, users.username, users.wins, users.pole_positions, users.podiums,championships.id AS id_championship, championships.name, championships.date FROM users
 INNER JOIN users_championships ON users.id = users_championships.id_user AND users.email = ?
-INNER JOIN championships ON championships.id = users_championships.id_championship;";
+INNER JOIN championships ON championships.id = users_championships.id_championship WHERE users_championships.visible = 1;";
 
 if($statement = $connection->prepare($sql)){
     $statement->bind_param("s", $email);

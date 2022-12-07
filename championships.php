@@ -35,7 +35,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
 
     <!-- Header -->
     <div class="header" id="header">
-      <a id="header-control-left" onclick="javascript:history.back()"><img src="./static/resources/back.svg"></a>
+      <a id="header-control-left" href="./home.php"><img src="./static/resources/back.svg"></a>
       <img id="header-logo" src="./static/resources/logo.webp" alt="Kart Master, the best platform to manage your kart races">
       <a id="header-control-right"><img src="./static/resources/menu.svg"></a>
     </div>

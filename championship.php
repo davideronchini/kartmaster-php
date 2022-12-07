@@ -72,8 +72,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
         <button onclick="redirect()" type="button" class="races-btn">NUOVA GARA</button>
       </div>
       <h1 id="races-done">Gare disputate</h1>
-      <div class="races">
-        <h2>Gare disputate</h2>
+      <div id="races" class="races" style="display: none;">
         <div id="races-list" class="races-list">
           <!-- The races will be loaded from javascript -->
         </div>

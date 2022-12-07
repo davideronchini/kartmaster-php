@@ -331,13 +331,15 @@ button{ cursor: pointer;}
 .championship-btn{
   font-family: 'Montserrat';
   font-size: 1.1vw;
-  width: 100%;
+  width: 84%;
   height: 3.8vw;
   border: none;
   background-color: #E10600;
   color: #fff;
   font-weight: 600;
   transition: 0.09s;
+  margin: 0 8%;
+  border-radius: 5px;
 }
 
 
@@ -406,7 +408,7 @@ button{ cursor: pointer;}
 
 .old-championship-info{
   width: 80%;
-  margin: 3vw 10% 8.3vw 10%;
+  margin: 0vw 10% 7.3vw 10%;
 }
 
 .old-championship-info div{

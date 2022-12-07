@@ -104,7 +104,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true){
             <!-- The data will be loaded from javascript -->
           </table>
         </div>
-        <button type="button" class="championship-btn" onclick="window.location.href = './championships.php'">TUTTI I CAMPIONATI</button>
+        <button type="button" class="championship-btn" onclick="window.location.href = './championships.php'" style="border-radius: 0px; width: 100%; margin: 0;">TUTTI I CAMPIONATI</button>
       </div>
     </div>
 

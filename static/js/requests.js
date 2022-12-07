@@ -224,7 +224,7 @@ function buildChampionshipCards(){
                             body: formData,
                         }).then(response2 => response2.json()).then(data2 => {
                             tmp = data2;
-                            cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form></div>";
+                            cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form><button onclick=\"deleteChampionship("+user.id+", "+dt.id+")\" class=\"championship-btn\" style=\"background-color: transparent; color: #292829; opacity: 0.7;\">Elimina</button></div>";
                             if (i == length || length == 0){
                                 cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
                     
@@ -246,6 +246,22 @@ function buildChampionshipCards(){
             }
         });
     }
+}
+
+function deleteChampionship(id_user, id_championship){
+    const formData = new FormData();
+    formData.append("id_user", id_user);
+    formData.append("id_championship", id_championship);
+
+    fetch('./api/delete_championship.php', {
+        method: 'POST',
+        header: {
+            'Content-Type': 'application/json'
+        },
+        body: formData,
+    });
+
+    window.location.href = "./championships.php";
 }
 
 function buildChampionshipUsersTable(){
@@ -495,7 +511,7 @@ function buildChampionshipPageRaces() {
         }).then(response => response.json()).then(data => {
             if (data){
                 length = data.length;
-                for (var i = 0; i < data.length; i++){
+                for (var i = 0; i < length; i++){
                     date = data[i].date;
 
                     const circuitFormData = new FormData();
@@ -511,6 +527,7 @@ function buildChampionshipPageRaces() {
                             var image = data[0].image;
                             races += "<div class=\"race\"><div class=\"race-texts\"><h2>"+data[0].name+"</h2><p>"+date+"</p></div><img class=\"race-image\" src=\"data:image/jpeg;base64,"+image+"\"></div>"
                             
+                            document.getElementsById("races").style.dysplay = "block";
                             if (i == length) document.getElementById('races-list').innerHTML = races;
                         }
                     });
