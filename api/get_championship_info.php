@@ -20,9 +20,13 @@ if($statement = $connection->prepare($sql)){
 
 $sql = "SELECT COUNT(*) FROM users
 INNER JOIN users_championships ON users.id = users_championships.id_user
-INNER JOIN championships ON championships.id = users_championships.id_championship";
+INNER JOIN championships ON championships.id = users_championships.id_championship WHERE championships.id = ?";
 
 if($statement = $connection->prepare($sql)){
+    $statement->bind_param("i", $id);
+
+    $id = $_POST['id_championship'];
+    
     $statement->execute();
 
     $result = $statement->get_result();
