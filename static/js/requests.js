@@ -70,8 +70,8 @@ function loadUser() {
                     },
                     body: formData,
                 }).then(response => response.json()).then(data => {
-                    if (data && document.getElementById('championship-name')){
-                        document.getElementById('championship-name').innerHTML = "\""+data[0].name+"\"";
+                    if (data && document.getElementById('last-championship-name')){
+                        document.getElementById('last-championship-name').innerHTML = "\""+data[0].name+"\"";
 
                         var tableRows = "<tr><th id=\"column-1\">Posizione</th><th id=\"column-2\">Pilota</th><th id=\"column-3\">Punti</th></tr>";
                         for (var i = 0; i < data.length; i++){
@@ -120,7 +120,6 @@ function changeUsername() {
 
 function createNewChampionship(){
     if (document.getElementById('new-championship-input').value){
-        console.log("baci");
         var formData = new FormData();
         formData.append("email", user.email);
         formData.append('new_championship_name', document.getElementById('new-championship-input').value);
@@ -192,6 +191,7 @@ function buildChampionshipCards(){
         }).then(response => response.json()).then(data => {
             var cards = "";
             var length = data.length;
+            var counter = 0;
             if (length != 0){
                 for (var i = 0; i < length; i++){
                     formData.append("id_championship", data[i].id);
@@ -223,9 +223,10 @@ function buildChampionshipCards(){
                             },
                             body: formData,
                         }).then(response2 => response2.json()).then(data2 => {
+                            counter++;
                             tmp = data2;
                             cards += "<div class=\"old-championship\"><div class=\"old-championship-top\"><h2>Campionato</h2><h3>\""+dt.name+"\"</h3></div><div class=\"old-championship-info\"><div><h5>Gare disputate</h5><p>"+tmp.races+"</p></div><div><h5>La mia posizione in classifica</h5><p>"+position+"°</p></div><div><h5>Partecipanti</h5><p>"+tmp.participants+"</p></div></div><form action=\"./championship.php?id="+dt.id+"\" method=\"POST\"><button type=\"submit\" class=\"championship-btn\">VEDI</button></form><button onclick=\"deleteChampionship("+user.id+", "+dt.id+")\" class=\"championship-btn\" style=\"background-color: transparent; color: #292829; opacity: 0.7;\">Elimina</button></div>";
-                            if (i == length || length <= 1){
+                            if (counter == length){
                                 cards += "<a class=\"new-championship\" href=\"./new-championship.php\"><h4>+</h4><p>NUOVO CAMPIONATO</p></a>";
                     
                                 if (document.getElementById('championships__content')){
@@ -359,8 +360,6 @@ function createNewRace(){
                     });
                 }
 
-                localStorage.clear();
-
                 // Set id_circuit value
                 fetch('./api/get_circuit_by_name.php', {
                     method: 'POST',
@@ -378,6 +377,8 @@ function createNewRace(){
                         body: circuitFormData,
                     }).then(response => response.json()).then(data => {
                         window.location.href = "./championship.php?id="+championshipId;
+                        
+                        localStorage.clear();
                     });
                 });
             }else{
@@ -469,7 +470,21 @@ function addResult() {
             "points": parseInt(points.value),
         };
 
-        results.push(result);
+        if (JSON.parse(localStorage.getItem("results"))) results = JSON.parse(localStorage.getItem("results"));
+        var found = false;
+        for (var i = 0; i < results.length; i++){
+            if (results[i].owner_email == result.owner_email){
+                results[i].starting_position = result.starting_position;
+                results[i].arrival_position = result.arrival_position;
+                results[i].best_time = result.best_time;
+                results[i].points = result.points;
+
+                found = true;
+            }
+        }
+
+        if (results.length == 0 || !found) results.push(result);
+
         localStorage.setItem("results", JSON.stringify(results));
     }
 
