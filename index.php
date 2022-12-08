@@ -140,6 +140,17 @@
 
     <!-- Link to js file -->
     <script src="./static/js/script.js"></script>
+    <script type="text/javascript">
+
+      //Android settings
+      var ua = navigator.userAgent.toLowerCase();
+      var isAndroid = ua.indexOf("android") > -1 && ua.indexOf("mobile");
+
+      if(isAndroid) {
+        window.location.href = "./app-login.php";
+      }
+
+    </script>
     
 </body>
 </html>
