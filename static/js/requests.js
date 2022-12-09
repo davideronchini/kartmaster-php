@@ -315,7 +315,7 @@ function loadChampionshipPageData() {
 
 function createNewRace(){
     var raceName = document.getElementById('new-race-input').value;
-    if (raceName){
+    if (raceName && raceName != "Seleziona la pista"){
         var formData = new FormData();
         formData.append('race_name', raceName);
 
@@ -542,11 +542,13 @@ function buildChampionshipPageRaces() {
                             var image = data[0].image;
                             races += "<div class=\"race\"><div class=\"race-texts\"><h2>"+data[0].name+"</h2><p>"+date+"</p></div><img class=\"race-image\" src=\"data:image/jpeg;base64,"+image+"\"></div>"
                             
-                            document.getElementsById("races").style.dysplay = "block";
+                            document.getElementById("races-container").style.dysplay = "block";
                             if (i == length) document.getElementById('races-list').innerHTML = races;
                         }
                     });
                 }
+            }else {
+                document.getElementById('races-container').style.display = "none";
             }
         });
     }

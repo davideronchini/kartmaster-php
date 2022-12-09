@@ -2,13 +2,14 @@
 
 require_once('./config.php');
 
-$sql = "INSERT INTO races (name, id_championship) VALUES (?, ?);";
+$sql = "INSERT INTO races (name, id_championship, id_circuit) VALUES (?, ?, ?);";
 
 if($statement = $connection->prepare($sql)){
-    $statement->bind_param("si", $name, $id);
+    $statement->bind_param("sii", $name, $id, $id_circuit);
 
     $name = $_POST['race_name'];
     $id = $_POST['id_championship'];
+    $id_circuit = 0;
     
     $statement->execute();
 
