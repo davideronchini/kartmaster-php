@@ -87,16 +87,24 @@ function loadUser() {
 }
 
 function deleteUser() {
-    var formData = new FormData().append("email", user.email);
-    fetch('./api/delete_user_by_email.php', {
+    const formData = new FormData();
+    formData.append("email", user.email);
+
+    fetch('./api/delete_user.php', {
         method: 'POST',
         header: {
-        'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: formData,
+    }).then(response => {
+        if (response.ok) {
+            window.location.href = './api/logout.php';
+        } else {
+            console.error('Failed to delete user');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
     });
-
-    window.location.href = './api/logout.php';
 }
 
 function changeUsername() {
