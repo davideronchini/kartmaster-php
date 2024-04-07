@@ -14,8 +14,9 @@ if($statement = $connection->prepare($sql)){
     
     $statement->execute();
   
-    //echo "Email " . $email . "eliminata con successo";
+    echo "Your account deletion has been successfully processed. We're sorry to see you go! If you have any further questions or concerns, feel free to reach out to us. Thank you for being a part of our community.";
 }else {
+    echo "There was an issue with deleting your account. Please ensure you have logged in correctly or verify if your account has already been deleted previously.";
     echo "Errore: non è possibile eseguire la query: $sql. " . $connection->error;
 }
 
